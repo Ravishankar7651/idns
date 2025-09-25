@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoTech - Professional ID Card Generator</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #2a3c7a, #4a5f9e);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: #1a2a6c;
+            margin-right: 10px;
+        }
+
+        h1 {
+            color: #1a2a6c;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: #4a5f9e;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            flex: 1;
+            min-width: 350px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .preview-section {
+            flex: 1;
+            min-width: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #1a2a6c;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4a5f9e;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1a2a6c;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #4a5f9e;
+            box-shadow: 0 0 0 3px rgba(74, 95, 158, 0.2);
+        }
+
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-container input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            background: #4a5f9e;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 600;
+        }
+
+        .file-input-button:hover {
+            background: #3a4f8e;
+        }
+
+        .file-input-button i {
+            margin-right: 8px;
+        }
+
+        .role-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .role-option {
+            flex: 1;
+            text-align: center;
+            padding: 15px 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .role-option.selected {
+            border-color: #4a5f9e;
+            background: #eef2ff;
+            color: #4a5f9e;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, #4a5f9e, #2a3c7a);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(74, 95, 158, 0.3);
+        }
+
+        .generate-btn:hover {
+            background: linear-gradient(to right, #3a4f8e, #1a2a6c);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 95, 158, 0.4);
+        }
+
+        .id-card-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .id-card {
+            width: 380px;
+            height: 240px;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+            border: 8px solid white;
+        }
+
+        .id-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #1a2a6c, #4a5f9e, #2a3c7a);
+        }
+
+        .id-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(26, 42, 108, 0.1) 0%, rgba(74, 95, 158, 0.1) 100%);
+            border-radius: 50%;
+            transform: translate(40px, 40px);
+        }
+
+        .photo-section {
+            width: 110px;
+            margin-right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .photo-placeholder {
+            width: 110px;
+            height: 130px;
+            background: #f1f1f1;
+            border: 2px dashed #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border-radius: 5px;
+            background: linear-gradient(135deg, #f1f1f1 0%, #e1e7ff 100%);
+        }
+
+        .photo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .id-number {
+            font-size: 0.8rem;
+            text-align: center;
+            color: #4a5f9e;
+            font-weight: 600;
+            background: #eef2ff;
+            padding: 5px 10px;
+            border-radius: 20px;
+            width: 100%;
+        }
+
+        .details-section {
+            flex: 1;
+            z-index: 1;
+        }
+
+        .company-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a2a6c;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .company-logo {
+            width: 30px;
+            height: 30px;
+            background: #1a2a6c;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+
+        .employee-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a2a6c;
+            margin-bottom: 8px;
+        }
+
+        .employee-role {
+            font-size: 1.1rem;
+            color: #4a5f9e;
+            margin-bottom: 15px;
+            font-weight: 600;
+            padding: 5px 10px;
+            background: #eef2ff;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .employee-details {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .detail-item {
+            margin-bottom: 5px;
+            display: flex;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            min-width: 100px;
+            color: #1a2a6c;
+        }
+
+        .download-btn {
+            margin-top: 25px;
+            padding: 12px 30px;
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(to right, #27ae60, #219653);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        .download-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .download-btn i {
+            margin-right: 8px;
+        }
+
+        .instructions {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .instructions h2 {
+            color: #1a2a6c;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4a5f9e;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .instructions .highlight {
+            background: #eef2ff;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+            color: #1a2a6c;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: #2ecc71;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .id-card {
+                width: 100%;
+                max-width: 380px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-id-card"></i></div>
+                <h1>InfoTech ID Generator</h1>
+            </div>
+            <p class="subtitle">Create professional ID cards for your team members in seconds</p>
+        </header>
+
+        <div class="main-content">
+            <section class="form-section">
+                <h2 class="section-title">Employee Information</h2>
+                <form id="idForm">
+                    <div class="form-group">
+                        <label for="employeeName">Full Name</label>
+                        <input type="text" id="employeeName" placeholder="Enter employee's full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="employeeId">Employee ID</label>
+                        <input type="text" id="employeeId" placeholder="Enter employee ID" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="text" id="phoneNumber" placeholder="Enter employee phone number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="photoUpload">Upload Photo</label>
+                        <div class="file-input-container">
+                            <div class="file-input-button">
+                                <i class="fas fa-camera"></i> Choose Photo
+                            </div>
+                            <input type="file" id="photoUpload" accept="image/*" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Role</label>
+                        <div class="role-options">
+                            <div class="role-option" data-role="Data Entry Operator">Data Entry Operator</div>
+                            <div class="role-option" data-role="Telecaller">Telecaller</div>
+                        </div>
+                        <input type="hidden" id="selectedRole" value="Data Entry Operator">
+                    </div>
+
+                    <button type="button" id="generateBtn" class="generate-btn">
+                        <i class="fas fa-id-card"></i> Generate ID Card
+                    </button>
+                </form>
+            </section>
+
+            <section class="preview-section">
+                <h2 class="section-title">ID Card Preview</h2>
+                <div class="id-card-container">
+                    <div class="id-card" id="idCard">
+                        <div class="photo-section">
+                            <div class="photo-placeholder">
+                                <i class="fas fa-user" style="font-size: 2rem; color: #4a5f9e;"></i>
+                            </div>
+                            <div class="id-number">ID: <span id="previewId">------</span></div>
+                        </div>
+                        <div class="details-section">
+                            <div class="company-name">
+                                <div class="company-logo">IT</div>
+                                InfoTech Solutions
+                            </div>
+                            <div class="employee-name" id="previewName">Employee Name</div>
+                            <div class="employee-role" id="previewRole">Role</div>
+                            <div class="employee-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Department:</span>
+                                    <span id="previewDept">------</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Phone:</span>
+                                    <span id="previewPhone">------</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Valid Until:</span>
+                                    <span id="previewValid">12/2025</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="downloadBtn" class="download-btn" disabled>
+                    <i class="fas fa-download"></i> Download ID Card
+                </button>
+            </section>
+        </div>
+
+        <section class="instructions">
+            <h2>How to Use</h2>
+            <ol>
+                <li>Enter the employee's <span class="highlight">full name</span> and <span class="highlight">ID
+                        number</span></li>
+                <li>Add the employee's <span class="highlight">phone number</span></li>
+                <li>Upload a <span class="highlight">professional photo</span> (recommended size: 300x400 pixels)</li>
+                <li>Select the appropriate <span class="highlight">role</span> (Data Entry Operator or Telecaller)</li>
+                <li>Click <span class="highlight">"Generate ID Card"</span> to see the preview</li>
+                <li>Click <span class="highlight">"Download ID Card"</span> to save the ID card as an image</li>
+            </ol>
+        </section>
+
+        <div class="footer">
+            <p>InfoTech Solutions &copy; 2023 | Professional ID Card Generator</p>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        ID Card downloaded successfully!
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Elements
+            const employeeNameInput = document.getElementById('employeeName');
+            const employeeIdInput = document.getElementById('employeeId');
+            const phoneNumberInput = document.getElementById('phoneNumber');
+            const photoUploadInput = document.getElementById('photoUpload');
+            const roleOptions = document.querySelectorAll('.role-option');
+            const selectedRoleInput = document.getElementById('selectedRole');
+            const generateBtn = document.getElementById('generateBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const previewName = document.getElementById('previewName');
+            const previewId = document.getElementById('previewId');
+            const previewRole = document.getElementById('previewRole');
+            const previewDept = document.getElementById('previewDept');
+            const previewPhone = document.getElementById('previewPhone');
+            const photoPlaceholder = document.querySelector('.photo-placeholder');
+            const notification = document.getElementById('notification');
+            const idCard = document.getElementById('idCard');
+
+            // Role selection
+            roleOptions.forEach(option => {
+                option.addEventListener('click', function () {
+                    roleOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedRoleInput.value = this.getAttribute('data-role');
+                });
+            });
+
+            // Set default role
+            roleOptions[0].classList.add('selected');
+
+            // Photo upload preview
+            photoUploadInput.addEventListener('change', function () {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        photoPlaceholder.innerHTML = `<img src="${e.target.result}" alt="Employee Photo">`;
+                    }
+
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+
+            // Generate ID card
+            generateBtn.addEventListener('click', function () {
+                if (!employeeNameInput.value || !employeeIdInput.value || !phoneNumberInput.value || !photoUploadInput.files[0]) {
+                    alert('Please fill in all fields and upload a photo');
+                    return;
+                }
+
+                // Update preview
+                previewName.textContent = employeeNameInput.value;
+                previewId.textContent = employeeIdInput.value;
+                previewRole.textContent = selectedRoleInput.value;
+                previewPhone.textContent = phoneNumberInput.value;
+                previewDept.textContent = selectedRoleInput.value === 'Data Entry Operator' ? 'Operations' : 'Sales';
+
+                // Enable download button
+                downloadBtn.disabled = false;
+
+                // Show success message
+                showNotification('ID Card generated successfully!');
+            });
+
+            // Download ID card
+            downloadBtn.addEventListener('click', function () {
+                if (downloadBtn.disabled) {
+                    showNotification('Please generate an ID card first', 'error');
+                    return;
+                }
+
+                // Use html2canvas to capture the ID card
+                html2canvas(idCard, {
+                    scale: 2, // Higher quality
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: null
+                }).then(canvas => {
+                    // Convert canvas to image data URL
+                    const imageData = canvas.toDataURL('image/png');
+
+                    // Create a temporary link to download the image
+                    const link = document.createElement('a');
+                    link.download = `id-card-${employeeIdInput.value}.png`;
+                    link.href = imageData;
+                    link.click();
+
+                    // Show success notification
+                    showNotification('ID Card downloaded successfully!');
+                }).catch(error => {
+                    console.error('Error generating ID card image:', error);
+                    showNotification('Error downloading ID card. Please try again.', 'error');
+                });
+            });
+
+            // Show notification function
+            function showNotification(message, type = 'success') {
+                notification.textContent = message;
+                notification.style.display = 'block';
+                notification.style.background = type === 'error' ? '#e74c3c' : '#2ecc71';
+
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+
+</html>
